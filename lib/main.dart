@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test_get_it_bloc_http/injection_container.dart';
+
+import 'features/presentation/bloc/province/province_bloc.dart';
 
 void main() {
   init();
@@ -30,14 +33,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,21 +40,39 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        child: BlocProvider(
+          create: (context) => ProvinceBloc(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'You have pushed the button this many times:',
+              ),
+              BlocBuilder<ProvinceBloc, ProvinceState>(
+                builder: (context, state) {
+                  if (state is ProvinceLoading) {
+                    return CircularProgressIndicator();
+                  } else if (state is ProvinceLoaded) {
+                    return Column(
+                      children: [
+                        ...List.generate(state.listProvince.length,
+                            (index) => Text(state.listProvince[index].text))
+                      ],
+                    );
+                  } else {
+                    return Text(
+                      '_counter',
+                      style: Theme.of(context).textTheme.headline4,
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {},
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
