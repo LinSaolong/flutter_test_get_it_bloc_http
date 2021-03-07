@@ -29,6 +29,7 @@ dependencies:
   flutter_bloc: ^6.1.2
   get_it: ^5.0.6
   http: any
+  syncfusion_flutter_datepicker: ^18.4.46-beta
 
 dev_dependencies:
   flutter_test:

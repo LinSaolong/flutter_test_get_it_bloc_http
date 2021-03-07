@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test_get_it_bloc_http/constants.dart';
+import 'package:flutter_test_get_it_bloc_http/features/presentation/pages/calendar_page.dart';
 import 'package:flutter_test_get_it_bloc_http/injection_container.dart';
 
 import 'features/presentation/bloc/province/province_bloc.dart';
@@ -85,33 +86,44 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      // gradient: RadialGradient(
-                      //   radius: 1.1,
-                      //   colors: [
-                      //     Color(0xFF484848),
-                      //     Color(0xFF242424),
-                      //   ],
-                      // ),
-                      borderRadius: BorderRadius.circular(50),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(-1, -1),
-                          // spreadRadius: 1,
-                          // blurRadius: 2,
+                  child: GestureDetector(
+                    onTap: () {
+                      print('calendar');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CalendarPage(),
                         ),
-                        BoxShadow(
-                          offset: Offset(1, 1),
-                          color: Colors.white.withOpacity(.2),
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        // gradient: RadialGradient(
+                        //   radius: 1.1,
+                        //   colors: [
+                        //     Color(0xFF484848),
+                        //     Color(0xFF242424),
+                        //   ],
+                        // ),
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(-1, -1),
+                            // spreadRadius: 1,
+                            // blurRadius: 2,
+                          ),
+                          BoxShadow(
+                            offset: Offset(1, 1),
+                            color: Colors.white.withOpacity(.2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        'Button',
+                        style: TextStyle(
+                          fontSize: 24,
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      'Button',
-                      style: TextStyle(
-                        fontSize: 24,
                       ),
                     ),
                   ),
