@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_test_get_it_bloc_http/features/presentation/pages/widgets/custom_dropdown_button.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CalendarPage extends StatelessWidget {
@@ -38,6 +39,11 @@ class CalendarPage extends StatelessWidget {
                 selectionShape: DateRangePickerSelectionShape.rectangle,
               ),
             ),
+            CustomDropdown(
+              text: 'custom',
+              items: ['test 1', 'test 2'],
+              isSelected: [false, false],
+            )
           ],
         ),
       ),
