@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_test_get_it_bloc_http/constants.dart';
 import 'package:flutter_test_get_it_bloc_http/features/presentation/pages/calendar_page.dart';
+import 'package:flutter_test_get_it_bloc_http/features/presentation/pages/google_map_page.dart';
 import 'package:flutter_test_get_it_bloc_http/injection_container.dart';
 
 import 'features/presentation/bloc/province/province_bloc.dart';
@@ -154,7 +154,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => MapPage()));
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
