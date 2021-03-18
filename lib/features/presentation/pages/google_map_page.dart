@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -41,6 +43,32 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
+  double _coordinateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    print(12742000 * asin(sqrt(a)));
+    return 12742 * asin(sqrt(a));
+  }
+
+  Future<double> getDistance({
+    double currentLatitude,
+    double currentLongiture,
+    double makerLatitude,
+    double makeLongitude,
+  }) async {
+    double distanceInMeters = await Geolocator().distanceBetween(
+      currentLatitude,
+      currentLatitude,
+      makerLatitude,
+      makeLongitude,
+    );
+    print("distance: $distanceInMeters");
+    return distanceInMeters;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -56,19 +84,6 @@ class _MapPageState extends State<MapPage> {
 
     // For controlling the view of the Map
 
-    mapController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: LatLng(
-            // Will be fetching in the next step
-            _currentPosition.latitude,
-            _currentPosition.longitude,
-          ),
-          zoom: 18.0,
-        ),
-      ),
-    );
-
     return Container(
       height: height,
       width: width,
@@ -81,6 +96,12 @@ class _MapPageState extends State<MapPage> {
               myLocationEnabled: true,
               myLocationButtonEnabled: false,
               mapType: MapType.normal,
+              markers: {
+                Marker(
+                  position: LatLng(17.95678048, 102.6155897),
+                  markerId: MarkerId('test'),
+                )
+              },
               zoomGesturesEnabled: true,
               zoomControlsEnabled: false,
               onMapCreated: (GoogleMapController controller) {
@@ -146,8 +167,27 @@ class _MapPageState extends State<MapPage> {
                       height: 56,
                       child: Icon(Icons.my_location),
                     ),
-                    onTap: () {
-                      _getCurrentLocation();
+                    onTap: () async {
+                      mapController.animateCamera(
+                        CameraUpdate.newCameraPosition(
+                          CameraPosition(
+                            target: LatLng(
+                              // Will be fetching in the next step
+                              _currentPosition.latitude,
+                              _currentPosition.longitude,
+                            ),
+                            zoom: 18.0,
+                          ),
+                        ),
+                      );
+                      await getDistance(
+                        currentLatitude: _currentPosition.latitude,
+                        currentLongiture: _currentPosition.longitude,
+                        makerLatitude: 17.956780,
+                        makeLongitude: 102.615589,
+                      );
+                      _coordinateDistance(_currentPosition.latitude,
+                          _currentPosition.longitude, 17.9601, 102.6118);
                     },
                   ),
                 ),
