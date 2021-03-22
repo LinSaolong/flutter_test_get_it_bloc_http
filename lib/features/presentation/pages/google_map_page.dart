@@ -5,22 +5,29 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key key}) : super(key: key);
+  const MapPage({
+    Key key,
+    this.currentPosition,
+    this.vendorPosition,
+  }) : super(key: key);
+  final Position currentPosition, vendorPosition;
 
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
+  // final Geolocator _geolocator = Geolocator();
   final Geolocator _geolocator = Geolocator();
+  // Initial location of the Map view
+  CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0));
 
   // For storing the current position
   Position _currentPosition;
   GoogleMapController mapController;
 
   _getCurrentLocation() async {
-    await _geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) async {
       setState(() {
         // Store the position in the variable
@@ -32,7 +39,8 @@ class _MapPageState extends State<MapPage> {
         mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
-              target: LatLng(position.latitude, position.longitude),
+              target: LatLng(widget.currentPosition.latitude,
+                  widget.currentPosition.longitude),
               zoom: 18.0,
             ),
           ),
@@ -53,22 +61,6 @@ class _MapPageState extends State<MapPage> {
     return 12742 * asin(sqrt(a));
   }
 
-  Future<double> getDistance({
-    double currentLatitude,
-    double currentLongiture,
-    double makerLatitude,
-    double makeLongitude,
-  }) async {
-    double distanceInMeters = await Geolocator().distanceBetween(
-      currentLatitude,
-      currentLatitude,
-      makerLatitude,
-      makeLongitude,
-    );
-    print("distance: $distanceInMeters");
-    return distanceInMeters;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -79,8 +71,6 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    // Initial location of the Map view
-    CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0));
 
     // For controlling the view of the Map
 
@@ -180,14 +170,6 @@ class _MapPageState extends State<MapPage> {
                           ),
                         ),
                       );
-                      await getDistance(
-                        currentLatitude: _currentPosition.latitude,
-                        currentLongiture: _currentPosition.longitude,
-                        makerLatitude: 17.956780,
-                        makeLongitude: 102.615589,
-                      );
-                      _coordinateDistance(_currentPosition.latitude,
-                          _currentPosition.longitude, 17.9601, 102.6118);
                     },
                   ),
                 ),

@@ -30,8 +30,10 @@ dependencies:
   get_it: ^5.0.6
   http: any
   syncfusion_flutter_datepicker: ^18.4.46-beta
-  google_maps_flutter: ^0.5.28+1
-  geolocator: ^5.3.1
+  google_maps_flutter: ^1.1.1
+  geolocator: ^6.1.0
+  location_permissions: ^3.0.0+1
+  permission_handler: ^5.1.0
 
 dev_dependencies:
   flutter_test:

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test_get_it_bloc_http/features/presentation/pages/calendar_page.dart';
 import 'package:flutter_test_get_it_bloc_http/features/presentation/pages/google_map_page.dart';
+import 'package:flutter_test_get_it_bloc_http/features/presentation/pages/vendor_page.dart';
 import 'package:flutter_test_get_it_bloc_http/injection_container.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'features/presentation/bloc/province/province_bloc.dart';
 
@@ -37,6 +39,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Position position;
+  getCurrentLocation() async {
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,8 +171,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => MapPage()));
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => VendorPage(
+                position: position,
+              ),
+            ),
+          );
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
